@@ -2,74 +2,14 @@ use core::num;
 use std::sync::{ Arc, Mutex };
 
 fn main() {
-    let raw_arguments = " - 32 - 1 + 200 + 3";
+    let raw_arguments = " 32 + 1 + 200 - 3";
     let mut args: Vec<String> = vec![];
 
-    // check
-    // 0: num
-    // 1: operator
-    let mut counter = 0;
-    let mut index = 0;
-
-    // flag
-    let mut negatif = false;
-    let mut negatif_between = false;
-    raw_arguments
-        .chars()
-        .enumerate()
-        .for_each(|(i, c)| {
-            println!("{:?}", c);
-            if counter == 0 && (c == '/' || c == '*') {
-                let space = " ".repeat(i);
-                panic!(
-                    "\nkalkuloc panic in order {}\n\n{}\n{}^\n{}unexpected syntax\n",
-                    i,
-                    raw_arguments,
-                    space,
-                    space
-                );
-            }
-
-            if let Ok(_) = c.to_string().parse::<f32>() {
-                if counter == 1 {
-                    index += 1;
-                    counter = 0;
-                }
-            } else if c == '-' {
-                negatif = !negatif;
-                if index != 0 {
-                    negatif_between = true;
-                }
-            } else {
-                if c != ' ' {
-                    index += 1;
-                    counter = 1;
-                }
-            }
-
-            if c != ' ' && c != '-' {
-                if let Some(item) = args.get_mut(index) {
-                    if negatif {
-                        index += 1;
-
-                        args.push("+".to_string());
-                        args.push(format!("-{}", c.to_string()));
-
-                        index += 1;
-                        negatif = false;
-                    } else {
-                        item.push(c);
-                    }
-                } else {
-                    if counter == 0 && negatif {
-                        args.push(format!("-{}", c.to_string()));
-                        negatif = false;
-                    } else {
-                        args.push(c.to_string());
-                    }
-                }
-            }
-        });
+    raw_arguments.split(" ").for_each(|c| {
+        if c != " " && c != "" {
+            args.push(c.to_string());
+        }
+    });
 
     println!("{:?}", args);
 
